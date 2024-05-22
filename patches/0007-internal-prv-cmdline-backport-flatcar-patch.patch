@@ -1,0 +1,40 @@
+From 9d97af5dd7cb5f6f301e970cdc24126d8a764c19 Mon Sep 17 00:00:00 2001
+From: Mathieu Tortuyaux <mtortuyaux@microsoft.com>
+Date: Mon, 19 Feb 2024 18:12:22 +0100
+Subject: [PATCH 07/21] internal/prv/cmdline: backport flatcar patch
+
+this patch provides backward compatibility for various config
+key
+
+Signed-off-by: Mathieu Tortuyaux <mtortuyaux@microsoft.com>
+---
+ internal/providers/cmdline/cmdline.go | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/internal/providers/cmdline/cmdline.go b/internal/providers/cmdline/cmdline.go
+index eb8e2b45..0561438a 100644
+--- a/internal/providers/cmdline/cmdline.go
++++ b/internal/providers/cmdline/cmdline.go
+@@ -33,7 +33,9 @@ import (
+ )
+ 
+ const (
+-	cmdlineUrlFlag = "ignition.config.url"
++	cmdlineUrlFlagLegacyCoreOS = "coreos.config.url"
++	cmdlineUrlFlagLegacy       = "flatcar.config.url"
++	cmdlineUrlFlag             = "ignition.config.url"
+ )
+ 
+ var (
+@@ -91,7 +93,7 @@ func parseCmdline(cmdline []byte) (url string) {
+ 		parts := strings.SplitN(strings.TrimSpace(arg), "=", 2)
+ 		key := parts[0]
+ 
+-		if key != cmdlineUrlFlag {
++		if !(key == cmdlineUrlFlagLegacy || key == cmdlineUrlFlagLegacyCoreOS || key == cmdlineUrlFlag) {
+ 			continue
+ 		}
+ 
+-- 
+2.43.0
+

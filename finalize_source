@@ -1,0 +1,1 @@
+(cd "$dir/src" && EDITOR=true dpkg-source --commit . flatcar-ignition.patch)
